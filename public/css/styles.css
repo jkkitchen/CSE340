@@ -241,3 +241,10 @@ h1 {
   text-align: center;
   font-size: 1.3rem;
 }
+
+/*-----Error Message Page-----*/
+#error-msg {
+  text-align: center;
+  font-family: var(--text-font);
+  font-size: 2rem;
+}
