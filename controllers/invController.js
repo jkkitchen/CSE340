@@ -19,4 +19,26 @@ invCont.buildByClassificationId = async function (req, res, next) {
     })
 }
 
+/* *******
+ *Build inventory item detail view
+ * ******* */
+invCont.buildByInventoryId = async function (req, res, next) {
+    const inv_id = req.params.inventoryId
+    const data = await invModel.getInventoryByInventoryId(inv_id)
+    const page = await utilities.buildInventoryItemPage(data)
+    let nav = await utilities.getNav()
+
+    //Get variables for title
+    const invYearName = data.inv_year
+    const invMakeName = data.inv_make //Don't need data[0] b/c it's only returning data for one car, not an array
+    const invModelName = data.inv_model
+
+    
+    res.render("./inventory/invDetailsView", {
+        title: `${invYearName} ${invMakeName} ${invModelName}`,
+        nav,
+        page,
+    })
+}
+
 module.exports = invCont

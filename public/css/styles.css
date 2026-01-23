@@ -80,6 +80,7 @@
 /*-----index.ejs-----*/
 h1 {
   font-family: var(--heading-font);
+  text-align: center;
 }
 
 #hero-section {
@@ -241,6 +242,37 @@ h1 {
   text-align: center;
   font-size: 1.3rem;
 }
+
+
+/*-----Vehicle Details Page-----*/
+#img-and-details {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#img-and-details img {
+  max-width: 450px;  
+  height: auto;
+  box-shadow: 0 2px 8px gray;
+}
+
+#details {
+  min-width: 300px;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  padding: 1rem;
+}
+
+#details h2 {
+  text-align: center;
+  background-color: var(--blue-color);
+  color: white;
+}
+
 
 /*-----Error Message Page-----*/
 #error-msg {
