@@ -61,6 +61,16 @@
   font-family: var(--heading-font);
 }
 
+.error-link {
+  text-align: center;
+}
+
+.error-link a {
+  text-decoration: none;
+  color: var(--blue-color);  
+  font-family: var(--text-font);
+}
+
 /*-----Navigation-----*/
 .menu ul {
   display: flex;

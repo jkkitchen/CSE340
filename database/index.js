@@ -1,12 +1,6 @@
 const { Pool } = require("pg")
 require("dotenv").config()
 
-//Temporary Code to check for errors:
-console.log("NODE_ENV =", process.env.NODE_ENV)
-console.log("DATABASE_URL exists?", !!process.env.DATABASE_URL)
-console.log("DATABASE_URL =", process.env.DATABASE_URL)
-
-
 /* ******
  * Connection Pool
  * SSL Object needed for local testing of app

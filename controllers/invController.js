@@ -41,4 +41,12 @@ invCont.buildByInventoryId = async function (req, res, next) {
     })
 }
 
+/* *******
+ *Process Intentional Error (for testing, step 3 of week 3 assignment)
+ * ******* */
+invCont.throwError = async function (req, res) {
+    throw new Error("I am an intentional error")
+}
+
+ //Export Functions
 module.exports = invCont
