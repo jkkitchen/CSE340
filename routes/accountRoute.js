@@ -10,8 +10,8 @@ accountRouter.get("/login", utilities.handleErrors(accountController.buildLogin)
 //Route for path when the Register (Sign-Up) link is clicked
 accountRouter.get("/register", utilities.handleErrors(accountController.buildRegistration))
 
-// //Error Route
-// accountRouter.get("/broken", utilities.handleErrors(accountController.throwError))
+//Route for posting the inputs on the registration form
+accountRouter.post('/register', utilities.handleErrors(accountController.registerAccount))
 
 
 //Export Route Functions
