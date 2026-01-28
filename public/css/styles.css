@@ -291,3 +291,53 @@ h1 {
   font-family: var(--text-font);
   font-size: 2rem;
 }
+
+
+/*-----Login Page-----*/
+#login-form-div, #registration-form-div {
+  display: flex;
+  flex-direction: column;  
+  align-items: center;
+}
+
+#login-form, #registration-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: var(--text-font);
+  padding: 1rem;
+}
+
+input[type=email], 
+input[type=password],
+input[type=text] {
+  margin: 0.8rem;
+  height: 40px;
+  width: 200px;
+}
+
+input[type="submit"] {
+  border: none;
+  background: var(--blue-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: .8rem;
+  width: 96%;
+  max-width: 300px;
+  margin: 2rem auto;
+  box-shadow: 1px 1px 4px #999;
+  font-family: var(--text-font), sans-serif;
+  font-size: 1rem;
+  display: block;
+}
+
+#no-account-text {
+  font-family: var(--text-font);
+  font-size: 1.4rem;
+}
+
+#registration-link {
+  font-family: var(--text-font);
+  color: var(--blue-color);
+  font-size: 1.4rem;
+}

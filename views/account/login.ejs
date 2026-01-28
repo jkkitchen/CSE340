@@ -1,0 +1,19 @@
+<!-- Content Heading -->
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+<% } else { res.redirect('/') } %>
+
+<!--Message View-->
+<%- messages() %>
+
+<!--Login HTML Form-->
+<div id="login-form-div">
+    <form id="login-form">
+        <label>E-mail: <input type="email" name="account_email" required></label>
+        <label>Password: <input type="password" name="account_password" required></label>
+        <input type="submit" id="submit-login" value="Login to My Account">
+    </form>
+    <p id="no-account-text">No Account? <a href="/account/register" id="registration-link">Sign-Up</a></p>
+</div>

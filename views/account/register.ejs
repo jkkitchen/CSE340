@@ -1,0 +1,20 @@
+<!-- Content Heading -->
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+<% } else { res.redirect('/') } %>
+
+<!--Message View-->
+<%- messages() %>
+
+<!--Registration HTML Form-->
+<div id="registration-form-div">
+    <form id="registration-form">
+        <label>First Name: <input type="text" name="account_firstname" required></label>
+        <label>Last Name: <input type="text" name="account_lastname" required></label>    
+        <label>E-mail: <input type="email" name="account_email" required></label>
+        <label>Password: <input type="password" name="account_password" pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}$" required></label>
+        <input type="submit" id="submit-registration" value="Register">
+    </form>
+</div>
