@@ -12,7 +12,10 @@
 <div id="login-form-div">
     <form id="login-form">
         <label>E-mail: <input type="email" name="account_email" required></label>
-        <label>Password: <input type="password" name="account_password" required></label>
+        <label>Password: <input type="password" name="account_password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" required></label>
+        <span id="password-desc">Passwords must be at least 12 characters and contain at least 1 number, 1 capital letter, and 1
+            special character.</span>
+
         <input type="submit" id="submit-login" value="Login to My Account">
     </form>
     <p id="no-account-text">No Account? <a href="/account/register" id="registration-link">Sign-Up</a></p>

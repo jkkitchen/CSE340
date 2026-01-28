@@ -2,6 +2,7 @@
 const express = require("express")
 const accountRouter = new express.Router()
 const accountController = require("../controllers/accountController")
+const regValidate = require('../utilities/account-validation')
 const utilities = require("../utilities")
 
 //Route for path that will be sent when the "My Account" link is clicked
@@ -11,7 +12,12 @@ accountRouter.get("/login", utilities.handleErrors(accountController.buildLogin)
 accountRouter.get("/register", utilities.handleErrors(accountController.buildRegistration))
 
 //Route for posting the inputs on the registration form
-accountRouter.post('/register', utilities.handleErrors(accountController.registerAccount))
+accountRouter.post(
+    "/register",
+    regValidate.registationRules(), //Rules to be used in validation process
+    regValidate.checkRegData, //Call to run validation and handle any errors
+    utilities.handleErrors(accountController.registerAccount)
+)
 
 
 //Export Route Functions

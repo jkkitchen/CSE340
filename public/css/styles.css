@@ -293,7 +293,7 @@ h1 {
 }
 
 
-/*-----Login Page-----*/
+/*-----Login/Registration Pages-----*/
 #login-form-div, #registration-form-div {
   display: flex;
   flex-direction: column;  
@@ -331,6 +331,20 @@ input[type="submit"] {
   display: block;
 }
 
+input:required:invalid, input:focus:invalid {
+  border-right: 4px solid red;
+}
+
+input:required:valid {
+  border-right: 4px solid green;
+}
+
+#password-desc {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 300px;  
+}
+
 #no-account-text {
   font-family: var(--text-font);
   font-size: 1.4rem;
@@ -340,4 +354,8 @@ input[type="submit"] {
   font-family: var(--text-font);
   color: var(--blue-color);
   font-size: 1.4rem;
+}
+
+.notice {  
+  list-style-type: none;
 }
