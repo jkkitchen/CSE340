@@ -19,6 +19,12 @@ accountRouter.post(
     utilities.handleErrors(accountController.registerAccount)
 )
 
+// Process the login attempt
+accountRouter.post(
+    "/login",
+    regValidate.loginRules(),
+    regValidate.checkLoginData
+)
 
 //Export Route Functions
 module.exports = accountRouter;
