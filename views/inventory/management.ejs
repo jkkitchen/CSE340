@@ -1,0 +1,13 @@
+<!-- Content Heading -->
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+<% } else { res.redirect('/') } %>
+
+<!--Message View-->
+<%- messages() %>
+
+<!--Links to add new classification and add new inventory forms-->
+<p><a href="/inv/add-classification" >Click Here</a>To Add A New Classification</p>
+<p><a href="/inv/add-inventory">Click Here</a>To Add New Inventory</p>

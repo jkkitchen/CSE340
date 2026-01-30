@@ -44,4 +44,23 @@ async function getInventoryByInventoryId(inventory_id) {
     }
 }
 
-module.exports = { getClassifications, getInventoryByClassificationId, getInventoryByInventoryId }
+/* *******
+ *Add new classification name to database
+* ******* */
+async function addNewClassificationName(classification_name) {
+    try {
+        const data = await pool.query(
+            `INSERT INTO public.classification (classification_name)
+            VALUES ($1)
+            RETURNING classification_name`, //only returns the row that was just inserted
+            [classification_name]
+        )
+        return data.rows[0] //To check the new row was inserted
+    } catch (error) {
+        console.error("addNewClassificationName error " + error)
+        throw error
+    }
+}
+
+
+module.exports = { getClassifications, getInventoryByClassificationId, getInventoryByInventoryId, addNewClassificationName }
