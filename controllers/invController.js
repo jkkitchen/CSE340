@@ -76,6 +76,19 @@ invCont.buildAddClassification = async function (req, res, next) {
     })
 }
 
+/* ****************************************
+*  Deliver Add New Inventory form page
+* *************************************** */
+invCont.buildAddInventory = async function (req, res, next) {
+    let nav = await utilities.getNav()
+    res.render("inventory/add-inventory", {
+        title: "Add Inventory",
+        nav,
+        errors: null
+    })
+}
+
+
 /* *******
  *Add New Classification Name
  * ******* */

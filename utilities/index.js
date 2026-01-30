@@ -92,4 +92,28 @@ Util.buildInventoryItemPage = async function (vehicleData) {
 Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
 
 
+/* **********
+* Build the dropdown menu for classification name in the Add Inventory form
+ * ******** */
+Util.buildClassificationList = async function (classification_id = null) {
+    //Pull classification names and id's from database using function in inventory model file
+    let data = await invModel.getClassifications()
+    //Write html for drop-down menu to include all classification names pulled from the database
+    let classificationList = `
+        <select name="classification_id" id="classificationList" required>
+        <option value=''>Choose a Classification</option>`
+    data.rows.forEach((row) => {
+        classificationList += `<option value="${row.classification_id}"`
+        //Use if statement to replace id's with names
+        if (classification_id != null && row.classification_id == classification_id) {
+            classificationList += ` selected `
+        } 
+        classificationList += `> ${ row.classification_name }</option >`        
+    })
+    classificationList += `</select>`
+
+    return classificationList
+}
+
+
 module.exports = Util

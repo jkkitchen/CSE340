@@ -25,6 +25,17 @@ router.post(
     utilities.handleErrors(invController.addClassification)
 )
 
+//Route to build add new inventory form page
+router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory))
+
+//Process add inventory form inputs
+router.post(
+    "/add-inventory",
+    invValidate.addInventoryRules(),
+    invValidate.checkInventoryInputs,
+    utilities.handleErrors(invController.addInventory)
+)
+
 //Error Route
 router.get("/broken", utilities.handleErrors(invController.throwError))
 

@@ -293,9 +293,10 @@ h1 {
 }
 
 
-/*-----Login/Registration Pages-----*/
+/*-----Login/Registration/Management/New Classification/New Inventory Pages-----*/
 #login-form-div, 
 #registration-form-div, 
+#management-div,
 #add-classification-form {
   display: flex;
   flex-direction: column;  
@@ -357,10 +358,20 @@ label {
   font-size: 1.4rem;
 }
 
-#registration-link {
+#registration-link,
+.management-link {
   font-family: var(--text-font);
   color: var(--blue-color);
   font-size: 1.4rem;
+}
+
+.management-link {
+  text-decoration: none;
+}
+
+.management-link:hover {
+  text-decoration: underline;
+  color: black;
 }
 
 .notice {  
