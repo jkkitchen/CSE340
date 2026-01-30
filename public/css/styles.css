@@ -294,7 +294,9 @@ h1 {
 
 
 /*-----Login/Registration Pages-----*/
-#login-form-div, #registration-form-div {
+#login-form-div, 
+#registration-form-div, 
+#add-classification-form {
   display: flex;
   flex-direction: column;  
   align-items: center;
@@ -339,10 +341,15 @@ input:required:valid {
   border-right: 4px solid green;
 }
 
-#password-desc {
+label {
+  font-family: var(--text-font);
+}
+
+#password-desc, #classification-desc {
   display: flex;
   flex-wrap: wrap;
-  max-width: 300px;  
+  max-width: 300px;
+  font-family: var(--text-font);  
 }
 
 #no-account-text {
