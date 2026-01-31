@@ -20,14 +20,12 @@
 
 <!--Add Inventory Form-->
 <div id="add-inventory-form-div">
-    <form id="add-inventory-form" action="/inv/add-inventory" method="post">
-        <label>Classification Name: <select id="inventory-classification-select" name="classification_name"  required value="<%= locals.classification_name %>">
-            <span></span>
-        </select></label>
+    <form id="inventory-form" action="/inv/add-inventory" method="post">
+        <label>Classification Name: <%- classificationList %></label><!--Call classification list built in Utilities function-->
         <label>Make: <input type="text" name="inv_make" required value="<%= locals.inv_make %>"></label>
         <label>Model: <input type="text" name="inv_model" required value="<%= locals.inv_model %>"></label>
         <label>Year: <input type="number" name="inv_year" min="1900" max="2099" required value="<%= locals.inv_year %>"></label>
-        <label>Description: <input type="textarea" name="inv_description" rows="5" cols="30" required value="<%= locals.inv_description %>"></label>
+        <label id="inventory-description">Description: <textarea name="inv_description" rows="5" cols="22" wrap="soft" required><%= locals.inv_description %></textarea></label>
         <label>Image Path: <input type="text" name="inv_image" required value="<%= locals.inv_image %>"></label>
         <label>Thumbnail Path: <input type="text" name="inv_thumbnail" required value="<%= locals.inv_thumbnail %>"></label>
         <label>Price: <input type="number" name="inv_price" min="0" placeholder="No commas or decimals." required value="<%= locals.inv_price %>"></label>

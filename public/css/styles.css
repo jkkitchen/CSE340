@@ -276,6 +276,7 @@ h1 {
   flex-direction: column;
   flex-wrap: wrap;
   padding: 1rem;
+  font-size: 1rem;
 }
 
 #details h2 {
@@ -297,13 +298,16 @@ h1 {
 #login-form-div, 
 #registration-form-div, 
 #management-div,
-#add-classification-form {
+#add-classification-form-div,
+#add-inventory-form-div {
   display: flex;
   flex-direction: column;  
   align-items: center;
 }
 
-#login-form, #registration-form {
+#login-form, 
+#registration-form, 
+#inventory-form {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -313,10 +317,28 @@ h1 {
 
 input[type=email], 
 input[type=password],
-input[type=text] {
+input[type=text],
+input[type=number],
+select {
   margin: 0.8rem;
   height: 40px;
   width: 200px;
+  font-family: var(--text-font);
+  font-size: 1rem;
+}
+
+#inventory-description {
+  display: flex;
+  align-items: center;
+}
+
+textarea {
+  margin: 0.8rem;
+  font-family: var(--text-font);
+  font-size: 1rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 input[type="submit"] {
@@ -334,7 +356,9 @@ input[type="submit"] {
   display: block;
 }
 
-input:required:invalid, input:focus:invalid {
+input:required:invalid, input:focus:invalid,
+select:required:invalid, select:focus:invalid,
+textarea:required:invalid, textarea:required:invalid {
   border-right: 4px solid red;
 }
 
@@ -344,6 +368,7 @@ input:required:valid {
 
 label {
   font-family: var(--text-font);
+  font-size: 1rem;
 }
 
 #password-desc, #classification-desc {

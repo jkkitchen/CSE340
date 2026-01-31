@@ -100,15 +100,16 @@ Util.buildClassificationList = async function (classification_id = null) {
     let data = await invModel.getClassifications()
     //Write html for drop-down menu to include all classification names pulled from the database
     let classificationList = `
-        <select name="classification_id" id="classificationList" required>
-        <option value=''>Choose a Classification</option>`
+        <select name="classification_id" id="classificationList" required> 
+            <option value=''>Choose a Classification</option>` //Added code to make it sticky
     data.rows.forEach((row) => {
         classificationList += `<option value="${row.classification_id}"`
-        //Use if statement to replace id's with names
+        //Use if statement to determine if classification_id is in database
         if (classification_id != null && row.classification_id == classification_id) {
             classificationList += ` selected `
         } 
-        classificationList += `> ${ row.classification_name }</option >`        
+        //Add classification name for user to see
+        classificationList += `>${row.classification_name}</option >`        
     })
     classificationList += `</select>`
 

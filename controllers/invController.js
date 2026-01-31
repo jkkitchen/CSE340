@@ -57,7 +57,7 @@ invCont.throwError = async function (req, res) {
 invCont.buildManagement = async function (req, res, next) {
     let nav = await utilities.getNav()
     res.render("inventory/management", {
-        title: "Management",
+        title: "Vehicle Management",
         nav,
         errors: null
     })
@@ -68,10 +68,10 @@ invCont.buildManagement = async function (req, res, next) {
 *  Deliver Add New Classification form page
 * *************************************** */
 invCont.buildAddClassification = async function (req, res, next) {
-    let nav = await utilities.getNav()
+    let nav = await utilities.getNav()    
     res.render("inventory/add-classification", {
         title: "Add Classification",
-        nav,
+        nav,        
         errors: null
     })
 }
@@ -81,9 +81,11 @@ invCont.buildAddClassification = async function (req, res, next) {
 * *************************************** */
 invCont.buildAddInventory = async function (req, res, next) {
     let nav = await utilities.getNav()
+    let classificationList = await utilities.buildClassificationList()
     res.render("inventory/add-inventory", {
         title: "Add Inventory",
         nav,
+        classificationList,
         errors: null
     })
 }
@@ -113,10 +115,63 @@ invCont.addClassification = async function (req, res) {
     } else {
         //Set flash message to be displayed
         req.flash("notice", "New classification name not added. Please try again.")
-        //Returns to registration view and sends error 501 (not successful) code
+        //Returns to add classification view and sends error 501 (not successful) code
         res.status(501).render("inventory/add-classification", {
         title: "Add Classification",
         nav,
+        errors: null,
+        })
+    }
+}
+
+/* *******
+ *Add New Inventory
+ * ******* */
+invCont.addInventory = async function (req, res) {
+    //Retrieves and stores the navigation bar for use in the view
+    let nav = await utilities.getNav()
+
+    //Retrieves and stores classification list to be used in the dropdown menu
+    let classificationList = await utilities.buildClassificationList()
+
+    //Collects and stores the values from HTML form that are being sent from the browser in the body of the request object
+    const { classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body
+
+    //Calls the function from the model
+    const regResult = await invModel.addNewInventory(
+        classification_id,
+        inv_make,
+        inv_model,
+        inv_year,
+        inv_description,
+        inv_image,
+        inv_thumbnail,
+        inv_price,
+        inv_miles,
+        inv_color
+    )
+
+    //Determines if the result was received
+    if (regResult) {
+        //Set flash message to be displayed
+        req.flash(
+        "notice",
+        `Congratulations, you\'ve added ${inv_year} ${inv_make} ${inv_model} to the inventory.`
+        )
+        //Takes user back to vehicle management page
+        res.status(201).render("inventory/management", {
+        title: "Vehicle Management",
+        nav,
+        errors: null,
+        })
+    } else {
+        //Set flash message to be displayed
+        req.flash("notice", "New inventory not added. Please try again.")
+        //Returns to add inventory view and sends error 501 (not successful) code
+        res.status(501).render("inventory/add-inventory", {
+        title: "Add Inventory",
+        nav,
+        classificationList,
         errors: null,
         })
     }

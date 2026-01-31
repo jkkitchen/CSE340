@@ -21,7 +21,7 @@ router.get("/add-classification", utilities.handleErrors(invController.buildAddC
 router.post(
     "/add-classification",
     invValidate.addClassificationRules(),
-    invValidate.checkClassificationName,
+    utilities.handleErrors(invValidate.checkClassificationName),
     utilities.handleErrors(invController.addClassification)
 )
 
@@ -32,7 +32,7 @@ router.get("/add-inventory", utilities.handleErrors(invController.buildAddInvent
 router.post(
     "/add-inventory",
     invValidate.addInventoryRules(),
-    invValidate.checkInventoryInputs,
+    utilities.handleErrors(invValidate.checkInventoryInputs),
     utilities.handleErrors(invController.addInventory)
 )
 
