@@ -1,6 +1,7 @@
 const accountModel = require("../models/account-model")
 const utilities = require("../utilities")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 
 /* ****************************************
 *  Deliver login view
@@ -21,6 +22,18 @@ async function buildRegistration(req, res, next) {
     let nav = await utilities.getNav()
     res.render("account/register", {
         title: "Register",
+        nav,
+        errors: null
+    })
+}
+
+/* ****************************************
+*  Deliver account management view
+* *************************************** */
+async function buildAccountManagement(req, res, next) {
+    let nav = await utilities.getNav()
+    res.render("account/index", {
+        title: "Account Management",
         nav,
         errors: null
     })
@@ -83,5 +96,63 @@ async function registerAccount(req, res) {
     }
 }
 
+
+/* ****************************************
+ *  Process login request
+ * ************************************ */
+async function accountLogin(req, res) {
+    //Retrieves and stores the navigation bar for use in the view
+    let nav = await utilities.getNav()
+
+    //Collects the incoming data from teh request body
+    const { account_email, account_password } = req.body
+
+    //Calls function from accountModel to locate data associated with account_email
+    const accountData = await accountModel.getAccountByEmail(account_email)
+    //Use if statement to determine if account exists
+    if (!accountData) { 
+        //Set flash message to be displayed if account does not exist
+        req.flash("notice", "Please check your credentials and try again.") 
+        res.status(400).render("account/login", {
+        title: "Login",
+        nav,
+        errors: null,
+        account_email,
+        })
+        return
+    }
+
+    //Determine if the incoming password and the hashed password from the database match
+    try {
+        //If passwords match, delete hashed password from accountData array
+        if (await bcrypt.compare(account_password, accountData.account_password)) {
+            delete accountData.account_password
+            //Create JWT Token with accountData inserted as the payload, secret is read from .env file
+            const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
+            
+            //If local testing (development), create cookie named jwt that stores the JWT token
+            //If not development, has the option of secure:true which means the cookie can only be passed through HTTPS and not HTTP
+            if (process.env.NODE_ENV === 'development') {
+                res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 }) //Can only be passed through the HTTP protocol and can't be accessed by client-side JS, expires in 1 hour
+            } else {
+                res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+            }
+            return res.redirect("/account/") //redirects to default account route
+        }
+        //If passwords don't match, display message and stay on login page
+        else { 
+            req.flash("message notice", "Please check your credentials and try again.")
+            res.status(400).render("account/login", {
+                title: "Login",
+                nav,
+                errors: null,
+                account_email,
+            })
+        }
+    } catch (error) {
+        throw new Error('Access Forbidden')
+    }
+}
+
 //Export functions
-module.exports = { buildLogin, buildRegistration, registerAccount }
+module.exports = { buildLogin, buildRegistration, buildAccountManagement, registerAccount, accountLogin }

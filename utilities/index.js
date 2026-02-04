@@ -1,5 +1,7 @@
 const invModel = require("../models/inventory-model")
 const Util = {}
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 
 /* **********
  * Constructs the nav HTML unordered list
@@ -116,5 +118,29 @@ Util.buildClassificationList = async function (classification_id = null) {
     return classificationList
 }
 
+
+/* ****************************************
+* Middleware to check token validity
+**************************************** */
+Util.checkJWTToken = (req, res, next) => {
+    if (req.cookies.jwt) { //check if JWT cookie exists
+        jwt.verify( //check validity of token
+            req.cookies.jwt, //JWT Token
+            process.env.ACCESS_TOKEN_SECRET, //"secret" from .env file
+            function (err, accountData) { //callback function which returns an error or the account data from token payload
+                if (err) {
+                    req.flash("Please log in")
+                    res.clearCookie("jwt") //cookie deleted
+                    return res.redirect("/account/login")
+                }
+                res.locals.accountData = accountData
+                res.locals.loggedin = 1
+                next()
+            }
+        )
+    } else { //no JWT cookie
+        next()
+    }
+}
 
 module.exports = Util

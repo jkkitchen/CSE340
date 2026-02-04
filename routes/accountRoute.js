@@ -11,6 +11,9 @@ accountRouter.get("/login", utilities.handleErrors(accountController.buildLogin)
 //Route for path when the Register (Sign-Up) link is clicked
 accountRouter.get("/register", utilities.handleErrors(accountController.buildRegistration))
 
+//Route for Account Management, default route after login successful
+accountRouter.get("/", utilities.handleErrors(accountController.buildAccountManagement))
+
 //Route for posting the inputs on the registration form
 accountRouter.post(
     "/register",
@@ -23,7 +26,8 @@ accountRouter.post(
 accountRouter.post(
     "/login",
     regValidate.loginRules(),
-    regValidate.checkLoginData
+    regValidate.checkLoginData,
+    utilities.handleErrors(accountController.accountLogin)
 )
 
 //Export Route Functions
