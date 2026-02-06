@@ -96,7 +96,7 @@ validate.checkClassificationName = async (req, res, next) => {
 }
   
 /* ******************************
- * Check data and return errors
+ * Check data from new inventory form and return errors
  * ***************************** */
 validate.checkInventoryInputs = async (req, res, next) => {
     const { classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body //this will be used to re-populate the form if there is an error
@@ -111,6 +111,39 @@ validate.checkInventoryInputs = async (req, res, next) => {
             nav,
             classificationList,
             classification_id,
+            inv_make,
+            inv_model,
+            inv_year,
+            inv_description,
+            inv_image,
+            inv_thumbnail,
+            inv_price,
+            inv_miles,
+            inv_color,        
+        })
+        return
+    }
+    next() //if no errors then continues onto the controller for new inventory to be added to database
+}
+
+/* ******************************
+ * Check data from modify inventory form and return errors
+ * ***************************** */
+validate.checkModifyInputs = async (req, res, next) => {
+    const { classification_id, inv_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body //this will be used to re-populate the form if there is an error
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) { //if there are errors
+        let nav = await utilities.getNav()
+        let invTitle = `${inv_year} ${inv_make} ${inv_model}`
+        let classificationList = await utilities.buildClassificationList(classification_id)
+        res.render("inventory/modify-inventory", { //stay on current page?
+            errors,
+            title: invTitle,
+            nav,
+            classificationList,
+            classification_id,
+            inv_id, 
             inv_make,
             inv_model,
             inv_year,

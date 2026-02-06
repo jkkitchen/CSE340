@@ -12,4 +12,12 @@
 <div id="management-div">
     <a class="management-link" href="/inv/add-classification">New Classification</a>
     <a class="management-link" href="/inv/add-inventory">New Inventory</a>
+
+    <h2 id="management-h2">Manage Inventory</h2>
+    <p id="management-p">Select a classification from the list below:</p>
+    <%- classificationSelect %>
+    <table id="inventoryDisplay"></table>
+    <noscript>JavaScript must be enabled to use this page.</noscript>
 </div>
+
+<script src="../../js/inventory.js"></script>

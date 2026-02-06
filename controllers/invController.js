@@ -55,10 +55,17 @@ invCont.throwError = async function (req, res) {
 *  Deliver Management Page
 * *************************************** */
 invCont.buildManagement = async function (req, res, next) {
+    //Retrieves and stores the navigation bar for use in the view
     let nav = await utilities.getNav()
+    
+    //Create a select list of the classifications for the inventory management view (same dropdown from add inventory)
+    const classificationSelect = await utilities.buildClassificationList()
+
+    //Render data object to be passed to the view
     res.render("inventory/management", {
         title: "Vehicle Management",
         nav,
+        classificationSelect,
         errors: null
     })
 }
@@ -90,6 +97,42 @@ invCont.buildAddInventory = async function (req, res, next) {
     })
 }
 
+/* ***************************
+ *  Deliver Modify Inventory View
+ * ************************** */
+invCont.buildModifyInventory = async function (req, res, next) {
+    let nav = await utilities.getNav()
+    //Collects and stores inventory_id from URL
+    const inventory_id = parseInt(req.params.inventory_id)
+
+    //Pull data from database for inventory item
+    const data = await invModel.getInventoryByInventoryId(inventory_id)    
+
+    //Set variables for title
+    const invTitle = `${data.inv_year} ${data.inv_make} ${data.inv_model}`
+
+    //Dropdown menu
+    let classificationList = await utilities.buildClassificationList(data.classification_id) //Added parameter to make dropdown sticky
+
+    //Render Page
+    res.render("inventory/modify-inventory", {
+        title: invTitle,
+        nav,
+        classificationList: classificationList,
+        errors: null,
+        inv_id: data.inv_id,
+        inv_make: data.inv_make,
+        inv_model: data.inv_model,
+        inv_year: data.inv_year,
+        inv_description: data.inv_description,
+        inv_image: data.inv_image,
+        inv_thumbnail: data.inv_thumbnail,
+        inv_price: data.inv_price,
+        inv_miles: data.inv_miles,
+        inv_color: data.inv_color,
+        classification_id: data.classification_id
+    })
+}
 
 /* *******
  *Add New Classification Name
@@ -173,6 +216,98 @@ invCont.addInventory = async function (req, res) {
         nav,
         classificationList,
         errors: null,
+        })
+    }
+}
+
+
+/* ***************************
+ *  Return Inventory by Classification As JSON
+ * ************************** */
+invCont.getInventoryJSON = async (req, res, next) => {
+    //Collects and stores classification_id from URL
+    const classification_id = parseInt(req.params.classification_id)
+   //Calls the model-based function to get the data based on classification_id
+    const invData = await invModel.getInventoryByClassificationId(classification_id)
+    //Check if data present
+    if (invData[0].inv_id) {
+        //Return data as a JSON object
+        return res.json(invData)
+    } else {
+        next(new Error("No data returned"))
+    }
+}
+
+
+/* *******
+ *Modify Inventory
+ * ******* */
+invCont.modifyInventory = async function (req, res, next) {
+    //Retrieves and stores the navigation bar for use in the view
+    let nav = await utilities.getNav()
+
+    //Collects and stores the values from HTML form that are being sent from the browser in the body of the request object
+    const {
+        inv_id,
+        inv_make,
+        inv_model,
+        inv_description,
+        inv_image,
+        inv_thumbnail,
+        inv_price,
+        inv_year,
+        inv_miles,
+        inv_color,
+        classification_id,
+    } = req.body
+
+    //Calls the function from the model
+    const updateResult = await invModel.modifyInventory(
+        inv_id,  
+        inv_make,
+        inv_model,
+        inv_description,
+        inv_image,
+        inv_thumbnail,
+        inv_price,
+        inv_year,
+        inv_miles,
+        inv_color,
+        classification_id
+    )
+
+    //Determines if the result was received
+    if (updateResult) {
+        //Sets title name
+        const itemName = updateResult.inv_make + " " + updateResult.inv_model
+        //Displays message
+        req.flash("notice", `The ${itemName} was successfully updated.`)
+        //Redirects to default inventory page
+        res.redirect("/inv/management")
+    } else {
+        //Builds dropdown menu with sticky classification_name
+        const classificationList = await utilities.buildClassificationList(classification_id)
+        //Sets title
+        const itemName = `${inv_year} ${inv_make} ${inv_model}`
+        //Displays message
+        req.flash("notice", "Sorry, the insert failed.")
+        //Reloads modify inventory page 
+        res.status(501).render("inventory/modify-inventory", {
+            title: itemName,
+            nav,
+            classificationList: classificationList,
+            errors: null,
+            inv_id,
+            inv_make,
+            inv_model,
+            inv_year,
+            inv_description,
+            inv_image,
+            inv_thumbnail,
+            inv_price,
+            inv_miles,
+            inv_color,
+            classification_id
         })
     }
 }

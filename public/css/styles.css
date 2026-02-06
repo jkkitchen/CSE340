@@ -294,12 +294,13 @@ h1 {
 }
 
 
-/*-----Login/Registration/Management/New Classification/New Inventory Pages-----*/
+/*-----Login/Registration/Management/New Classification/New Inventory Pages/Modify Inventory-----*/
 #login-form-div, 
 #registration-form-div, 
 #management-div,
 #add-classification-form-div,
-#add-inventory-form-div {
+#add-inventory-form-div,
+#modify-inventory-form-div {
   display: flex;
   flex-direction: column;  
   align-items: center;
@@ -307,7 +308,8 @@ h1 {
 
 #login-form, 
 #registration-form, 
-#inventory-form {
+#inventory-form,
+#modify-inventory-form {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -322,7 +324,7 @@ input[type=number],
 select {
   margin: 0.8rem;
   height: 40px;
-  width: 200px;
+  width: 225px;
   font-family: var(--text-font);
   font-size: 1rem;
 }
@@ -401,4 +403,39 @@ label {
 
 .notice {  
   list-style-type: none;
+}
+
+/*-----Vehicle Management-----*/
+#management-h2 {
+  font-family: var(--heading-font);
+}
+
+#management-p {
+  font-family: var(--text-font);
+  font-size: 1.1rem;
+}
+
+#inventoryDisplay {
+  width: 60%;
+  border-collapse: collapse;
+  margin: 1rem auto;
+  font-family: var(--text-font);
+}
+
+#inventoryDisplay th,
+#inventoryDisplay td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+}
+
+.table-link {
+  text-decoration: none;
+  font-family: var(--text-font);
+  color: var(--blue-color);
+}
+
+.table-link:hover {
+  text-decoration: underline;
+  color: black;
 }

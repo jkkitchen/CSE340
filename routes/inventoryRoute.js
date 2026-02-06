@@ -36,6 +36,20 @@ router.post(
     utilities.handleErrors(invController.addInventory)
 )
 
+//Route that works with the URL in js>inventory.js to display inventory in table on Vehicle Management page
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+
+//Route for "Modify" links in inventory table on Vehicle Management page
+router.get("/edit/:inventory_id", utilities.handleErrors(invController.buildModifyInventory))
+
+//Process modify inventory form inputs
+router.post(
+    "/modify-inventory/",
+    invValidate.addInventoryRules(),
+    utilities.handleErrors(invValidate.checkModifyInputs),
+    utilities.handleErrors(invController.modifyInventory)
+)
+
 //Error Route
 router.get("/broken", utilities.handleErrors(invController.throwError))
 

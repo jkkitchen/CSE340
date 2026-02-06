@@ -12,7 +12,11 @@ accountRouter.get("/login", utilities.handleErrors(accountController.buildLogin)
 accountRouter.get("/register", utilities.handleErrors(accountController.buildRegistration))
 
 //Route for Account Management, default route after login successful
-accountRouter.get("/", utilities.handleErrors(accountController.buildAccountManagement))
+accountRouter.get(
+    "/",
+    utilities.checkLogin, //checks for res.locals.logged in included in token
+    utilities.handleErrors(accountController.buildAccountManagement)
+)
 
 //Route for posting the inputs on the registration form
 accountRouter.post(
