@@ -201,7 +201,7 @@ async function updateAccountInfo(req, res) {
         //Set flash message to be displayed
         req.flash(
         "notice",
-        `Congratulations, you\'ve udpated the account for ${account_firstname} ${account_lastname} at ${account_email}.`
+        `Congratulations, you\'ve updated the account for ${account_firstname} ${account_lastname} at ${account_email}.`
         )
         //Takes user back to management view
         res.status(201).render("account/index", {
@@ -217,7 +217,7 @@ async function updateAccountInfo(req, res) {
         //Set flash message to be displayed
         req.flash("notice", "Sorry, the update failed.")
         //Returns to update view and sends error 501 (not successful) code
-        res.status(501).render("account/udpate-account", {
+        res.status(501).render("account/update-account", {
             title: "Update My Account",
             nav,
             errors: null,
@@ -261,7 +261,7 @@ async function updatePassword(req, res) {
     }
 
     //Calls the function from the model
-    const updateResult = await accountModel.updatePassword(hashedPassword)
+    const updateResult = await accountModel.updatePassword(account_id, hashedPassword)
 
     //Determines if the result was received
     if (updateResult) {

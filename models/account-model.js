@@ -38,7 +38,7 @@ async function getAccountByEmail (account_email) {
         [account_email])
         return result.rows[0]
     } catch (error) {
-        return new Error("No matching email found")
+        throw new Error("No matching email found")
     }
 }
 
@@ -53,7 +53,7 @@ async function getAccountById (account_id) {
         [account_id])
         return result.rows[0]
     } catch (error) {
-        return new Error("No matching id found")
+        throw new Error("No matching id found")
     }
 }
 
@@ -61,16 +61,17 @@ async function getAccountById (account_id) {
 /* *****************************
 * Update Account Data for First Name, Last Name, and Email
 * ***************************** */
-async function updateAccountInfo (account_id, account_firstname, account_lastname, account_email) {
+async function updateAccountInfo (account_firstname, account_lastname, account_email, account_id) {
     try {
         const result = await pool.query(
             `UPDATE public.account 
             SET account_firstname = $1, account_lastname = $2, account_email = $3
-            WHERE account_id = $4`,
+            WHERE account_id = $4
+            RETURNING account_id, account_firstname, account_lastname, account_email`,
         [account_firstname, account_lastname, account_email, account_id])
         return result.rows[0]
     } catch (error) {
-        return new Error("No matching id found")
+        throw new Error("No matching id found")
     }
 }
 
@@ -83,11 +84,12 @@ async function updatePassword (account_id, account_password) {
         const result = await pool.query(
             `UPDATE public.account 
             SET account_password = $1
-            WHERE account_id = $2`,
+            WHERE account_id = $2
+            RETURNING account_id, account_password`,
         [account_password, account_id])
         return result.rows[0]
     } catch (error) {
-        return new Error("No matching id found")
+        throw new Error("No matching id found")
     }
 }
 
