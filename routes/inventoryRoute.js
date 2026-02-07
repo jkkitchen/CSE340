@@ -50,6 +50,15 @@ router.post(
     utilities.handleErrors(invController.modifyInventory)
 )
 
+//Route for "Delete" links in inventory table on Vehicle Management page
+router.get("/delete/:inventory_id", utilities.handleErrors(invController.buildDeleteInventory))
+
+//Process delete inventory confirmation
+router.post(
+    "/delete-inventory/",
+    utilities.handleErrors(invController.deleteInventory)
+)
+
 //Error Route
 router.get("/broken", utilities.handleErrors(invController.throwError))
 

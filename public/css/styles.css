@@ -300,7 +300,8 @@ h1 {
 #management-div,
 #add-classification-form-div,
 #add-inventory-form-div,
-#modify-inventory-form-div {
+#modify-inventory-form-div,
+#delete-inventory-form-div {
   display: flex;
   flex-direction: column;  
   align-items: center;
@@ -309,7 +310,8 @@ h1 {
 #login-form, 
 #registration-form, 
 #inventory-form,
-#modify-inventory-form {
+#modify-inventory-form,
+#delete-inventory-form {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -410,7 +412,7 @@ label {
   font-family: var(--heading-font);
 }
 
-#management-p {
+#management-p, #confirm-deletion {
   font-family: var(--text-font);
   font-size: 1.1rem;
 }

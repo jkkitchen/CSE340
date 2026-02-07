@@ -130,4 +130,25 @@ async function modifyInventory(
     }
 }
 
-module.exports = { getClassifications, getInventoryByClassificationId, getInventoryByInventoryId, addNewClassificationName, addNewInventory, modifyInventory }
+async function deleteInventory(inv_id) {
+    try {
+        const sql =
+            `DELETE FROM public.inventory 
+            WHERE inv_id = $1`
+        const result = await pool.query(sql, [inv_id])
+        return result.rowCount //Using rowcount because the object will exist whether or not it was deleted, this way we can check if it was deleted (0 = failure, 1 = success)
+    } catch (error) {
+        console.error("model error: " + error)
+        throw new Error("Delete Inventory Error") //added throw so it wil not silently fail
+    }
+}
+
+module.exports = {
+    getClassifications,
+    getInventoryByClassificationId,
+    getInventoryByInventoryId,
+    addNewClassificationName,
+    addNewInventory,
+    modifyInventory,
+    deleteInventory
+}

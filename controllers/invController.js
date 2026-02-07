@@ -134,6 +134,33 @@ invCont.buildModifyInventory = async function (req, res, next) {
     })
 }
 
+/* ***************************
+ *  Deliver Delete Inventory View
+ * ************************** */
+invCont.buildDeleteInventory = async function (req, res, next) {
+    let nav = await utilities.getNav()
+    //Collects and stores inventory_id from URL
+    const inventory_id = parseInt(req.params.inventory_id)
+
+    //Pull data from database for inventory item
+    const data = await invModel.getInventoryByInventoryId(inventory_id)    
+
+    //Set variables for title
+    const invTitle = `${data.inv_year} ${data.inv_make} ${data.inv_model}`
+
+    //Render Page
+    res.render("inventory/delete-inventory", {
+        title: invTitle,
+        nav,        
+        errors: null,
+        inv_id: data.inv_id,
+        inv_make: data.inv_make,
+        inv_model: data.inv_model,
+        inv_year: data.inv_year,
+        inv_price: data.inv_price,        
+    })
+}
+
 /* *******
  *Add New Classification Name
  * ******* */
@@ -279,7 +306,7 @@ invCont.modifyInventory = async function (req, res, next) {
     //Determines if the result was received
     if (updateResult) {
         //Sets title name
-        const itemName = updateResult.inv_make + " " + updateResult.inv_model
+        const itemName = `${inv_year} ${inv_make} ${inv_model}`
         //Displays message
         req.flash("notice", `The ${itemName} was successfully updated.`)
         //Redirects to default inventory page
@@ -290,7 +317,7 @@ invCont.modifyInventory = async function (req, res, next) {
         //Sets title
         const itemName = `${inv_year} ${inv_make} ${inv_model}`
         //Displays message
-        req.flash("notice", "Sorry, the insert failed.")
+        req.flash("notice", "Sorry, the modification failed.")
         //Reloads modify inventory page 
         res.status(501).render("inventory/modify-inventory", {
             title: itemName,
@@ -308,6 +335,51 @@ invCont.modifyInventory = async function (req, res, next) {
             inv_miles,
             inv_color,
             classification_id
+        })
+    }
+}
+
+/* *******
+ *Delete Inventory
+ * ******* */
+invCont.deleteInventory = async function (req, res, next) {
+    //Retrieves and stores the navigation bar for use in the view
+    let nav = await utilities.getNav()
+
+    //Collects and stores the values from HTML form that are being sent from the browser in the body of the request object
+    const {
+        inv_id,
+        inv_make,
+        inv_model,        
+        inv_price,
+        inv_year,       
+    } = req.body
+
+    //Set title name
+    const titleName = ` ${inv_year} ${inv_make} ${inv_model}`
+
+    //Calls the function from the model
+    const deleteResult = await invModel.deleteInventory(inv_id) //only need the inv_id to delete the row, will be either 0 (failure) or 1 (success)
+
+    //Determines if the data was deleted
+    if (deleteResult === 1) { //Changed since we're not just checking if it exists, we want to know if the data was deleted
+        //Displays message
+        req.flash("notice", `The ${titleName} was successfully deleted.`)
+        //Redirects to default inventory page
+        res.redirect("/inv/management")
+    } else {
+        //Displays message
+        req.flash("notice", "Sorry, the deletion failed.")
+        //Reloads delete inventory page 
+        res.status(501).render("inventory/delete-inventory", {
+            title: titleName,
+            nav,            
+            errors: null,
+            inv_id,
+            inv_make,
+            inv_model,
+            inv_year,           
+            inv_price            
         })
     }
 }
