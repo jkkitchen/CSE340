@@ -301,7 +301,8 @@ h1 {
 #add-classification-form-div,
 #add-inventory-form-div,
 #modify-inventory-form-div,
-#delete-inventory-form-div {
+#delete-inventory-form-div,
+.form-div {
   display: flex;
   flex-direction: column;  
   align-items: center;
@@ -311,7 +312,8 @@ h1 {
 #registration-form, 
 #inventory-form,
 #modify-inventory-form,
-#delete-inventory-form {
+#delete-inventory-form,
+.cse-form {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
