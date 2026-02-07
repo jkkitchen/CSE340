@@ -12,52 +12,77 @@ router.get("/type/:classificationId", invController.buildByClassificationId);
 router.get("/detail/:inventoryId", invController.buildByInventoryId); //used detail instead of type because it's for one specific car, not a category
 
 //Route to build page with links to add classification name and inventory
-router.get("/management", utilities.handleErrors(invController.buildManagement))
+router.get(
+    "/management",
+    utilities.checkAccountType,
+    utilities.handleErrors(invController.buildManagement)
+)
 
 //Route to build add new classification form page
-router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification))
+router.get(
+    "/add-classification",
+    utilities.checkAccountType,
+    utilities.handleErrors(invController.buildAddClassification)
+)
 
 //Process add classification form inputs
 router.post(
     "/add-classification",
+    utilities.checkAccountType,
     invValidate.addClassificationRules(),
     utilities.handleErrors(invValidate.checkClassificationName),
     utilities.handleErrors(invController.addClassification)
 )
 
 //Route to build add new inventory form page
-router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory))
+router.get(
+    "/add-inventory",
+    utilities.checkAccountType,
+    utilities.handleErrors(invController.buildAddInventory))
 
 //Process add inventory form inputs
 router.post(
     "/add-inventory",
+    utilities.checkAccountType,
     invValidate.addInventoryRules(),
     utilities.handleErrors(invValidate.checkInventoryInputs),
     utilities.handleErrors(invController.addInventory)
 )
 
 //Route that works with the URL in js>inventory.js to display inventory in table on Vehicle Management page
-router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+router.get(
+    "/getInventory/:classification_id",
+    utilities.checkAccountType,
+    utilities.handleErrors(invController.getInventoryJSON)
+)
 
 //Route for "Modify" links in inventory table on Vehicle Management page
-router.get("/edit/:inventory_id", utilities.handleErrors(invController.buildModifyInventory))
+router.get(
+    "/edit/:inventory_id",
+    utilities.checkAccountType,
+    utilities.handleErrors(invController.buildModifyInventory)
+)
 
 //Process modify inventory form inputs
 router.post(
     "/modify-inventory/",
+    utilities.checkAccountType,
     invValidate.addInventoryRules(),
     utilities.handleErrors(invValidate.checkModifyInputs),
     utilities.handleErrors(invController.modifyInventory)
 )
 
 //Route for "Delete" links in inventory table on Vehicle Management page
-router.get("/delete/:inventory_id", utilities.handleErrors(invController.buildDeleteInventory))
+router.get(
+    "/delete/:inventory_id",
+    utilities.checkAccountType,
+    utilities.handleErrors(invController.buildDeleteInventory))
 
 //Process delete inventory confirmation
 router.post(
     "/delete-inventory/",
-    utilities.handleErrors(invController.deleteInventory)
-)
+    utilities.checkAccountType,
+    utilities.handleErrors(invController.deleteInventory))
 
 //Error Route
 router.get("/broken", utilities.handleErrors(invController.throwError))

@@ -8,6 +8,9 @@ const utilities = require("../utilities")
 //Route for path that will be sent when the "My Account" link is clicked
 accountRouter.get("/login", utilities.handleErrors(accountController.buildLogin))
 
+//Route for when "Welcome __" link is clicked to go to account management page
+accountRouter.get("/", utilities.handleErrors(accountController.buildAccountManagement))
+
 //Route for path when the Register (Sign-Up) link is clicked
 accountRouter.get("/register", utilities.handleErrors(accountController.buildRegistration))
 
