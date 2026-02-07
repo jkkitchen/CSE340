@@ -129,16 +129,23 @@ Util.checkJWTToken = (req, res, next) => {
             process.env.ACCESS_TOKEN_SECRET, //"secret" from .env file
             function (err, accountData) { //callback function which returns an error or the account data from token payload
                 if (err) {
-                    req.flash("Please log in")
+                    req.flash("notice", "Please log in")
                     res.clearCookie("jwt") //cookie deleted
                     return res.redirect("/account/login")
                 }
                 res.locals.accountData = accountData
                 res.locals.loggedin = 1
+                if (res.locals.accountData.account_type === "Employee" || res.locals.accountData.account_type === "Admin") {
+                    res.locals.accessLevel = 1
+                } else {
+                    res.locals.accessLevel = 0
+                }
                 next()
             }
         )
     } else { //no JWT cookie
+        res.locals.loggedin = 0
+        res.locals.accessLevel = 0
         next()
     }
 }
@@ -161,11 +168,9 @@ Util.checkJWTToken = (req, res, next) => {
  * ************************************ */
 Util.checkAccountType = (req, res, next) => {    
     if (res.locals.accountData) { //Checks if account data exists, which would mean checking if they're logged in
-        if (res.locals.accountData.account_type === "Employee" || res.locals.accountData.account_type === "Admin") {
-            res.locals.accessLevel = 1 //1 will mean they have access to inventory management tools
+        if (res.locals.accessLevel === 1) { //1 will mean they have access to inventory management tools            
             next()
-        } else {
-            res.locals.accessLevel = 0 //0 will mean they do NOT have access to inventory management tools
+        } else { //0 will mean they do NOT have access to inventory management tools            
             req.flash("notice", "Not authorized to view inventory management pages.")
             return res.redirect("/account/")        
         }

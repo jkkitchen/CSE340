@@ -42,5 +42,62 @@ async function getAccountByEmail (account_email) {
     }
 }
 
+
+/* *****************************
+* Return account data using account id
+* ***************************** */
+async function getAccountById (account_id) {
+    try {
+        const result = await pool.query(
+        'SELECT account_id, account_firstname, account_lastname, account_email FROM account WHERE account_id = $1',
+        [account_id])
+        return result.rows[0]
+    } catch (error) {
+        return new Error("No matching id found")
+    }
+}
+
+
+/* *****************************
+* Update Account Data for First Name, Last Name, and Email
+* ***************************** */
+async function updateAccountInfo (account_id, account_firstname, account_lastname, account_email) {
+    try {
+        const result = await pool.query(
+            `UPDATE public.account 
+            SET account_firstname = $1, account_lastname = $2, account_email = $3
+            WHERE account_id = $4`,
+        [account_firstname, account_lastname, account_email, account_id])
+        return result.rows[0]
+    } catch (error) {
+        return new Error("No matching id found")
+    }
+}
+
+
+/* *****************************
+* Update Account Data for Password
+* ***************************** */
+async function updatePassword (account_id, account_password) {
+    try {
+        const result = await pool.query(
+            `UPDATE public.account 
+            SET account_password = $1
+            WHERE account_id = $2`,
+        [account_password, account_id])
+        return result.rows[0]
+    } catch (error) {
+        return new Error("No matching id found")
+    }
+}
+
+
 //Export the functions
-module.exports = { registerAccount, checkExistingEmail, getAccountByEmail }
+module.exports = {
+    registerAccount,
+    checkExistingEmail,
+    getAccountByEmail,
+    getAccountById,
+    updateAccountInfo,
+    updatePassword
+}

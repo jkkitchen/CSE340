@@ -6,7 +6,7 @@ const accountModel = require("../models/account-model")
 /*  **********************************
   *  Registration Data Validation Rules
   * ********************************* */
-  validate.registationRules = () => {
+  validate.registrationRules = () => {
     return [
         // firstname is required and must be string
         body("account_firstname")
@@ -26,8 +26,7 @@ const accountModel = require("../models/account-model")
   
         // valid email is required and cannot already exist in the DB
         body("account_email")
-        .trim()
-        .escape()
+        .trim()        
         .notEmpty()
         .isEmail() //checks is string is an email
         .normalizeEmail() //canonicalize an e-mail (makes all letter lowercase, removes dots, removes sub-addresses)
@@ -64,12 +63,12 @@ validate.checkRegData = async (req, res, next) => {
     if (!errors.isEmpty()) { //if there are errors
         let nav = await utilities.getNav()
         res.render("account/register", {
-        errors,
-        title: "Registration",
-        nav,
-        account_firstname,
-        account_lastname,
-        account_email,
+            errors,
+            title: "Registration",
+            nav,
+            account_firstname,
+            account_lastname,
+            account_email,
         })
         return
     }
@@ -113,15 +112,124 @@ validate.checkLoginData = async (req, res, next) => {
     if (!errors.isEmpty()) { //if there are errors
         let nav = await utilities.getNav()
         res.render("account/login", {
-        errors,
-        title: "Login",
-        nav,
-        account_email,
+            errors,
+            title: "Login",
+            nav,
+            account_email,
         })
         return
     }
     next() //if no errors then continues onto the controller for login to be carried out
 }
 
+
+/*  **********************************
+  *  Account Update Validation Rules
+  * ********************************* */
+  validate.accountUpdateRules = () => {
+    return [
+        // firstname is required and must be string
+        body("account_firstname")
+            .trim() //trims whitespace
+            .escape() //replaces <,>.&.',",`,/,\ with HTML entities
+            .notEmpty() //checks there is a value entered
+            .isLength({ min: 1 }) //checks length is greater than 1
+            .withMessage("Please provide a first name."), // on error this message is sent.
+  
+        // lastname is required and must be string
+        body("account_lastname")
+            .trim()
+            .escape()
+            .notEmpty()
+            .isLength({ min: 2 }) //checks length is greater than 2
+            .withMessage("Please provide a last name."), // on error this message is sent.
+  
+        // valid email is required
+        body("account_email")
+        .trim()        
+        .notEmpty()
+        .isEmail() //checks is string is an email
+        .normalizeEmail() //canonicalize an e-mail (makes all letter lowercase, removes dots, removes sub-addresses)
+        .withMessage("A valid email is required.")        
+        .custom(async (account_email, { req }) => {
+            //Get existing account_id from URL
+            const account_id = parseInt(req.body.account_id)
+            //Pull the account info from the database that is associated with the email address entered (to determine if it's already in database for a different user)            
+            const accountData = await accountModel.getAccountByEmail(account_email)
+            //Use if statement to determine if the email they're using exists in the database and if it belongs to another user by comparing account id's
+            if (accountData && account_id !== accountData.account_id ) {
+                throw new Error("Email exists. Please use different email")
+            }
+        })
+    ]
+}
+
+/*  **********************************
+  *  Change Password Validation Rules
+  * ********************************* */
+  validate.passwordUpdateRules = () => {
+    return [  
+        // password is required and must be strong password
+        body("account_password")
+            .trim()
+            .notEmpty()
+            .isStrongPassword({ //checks if string can be considered a strong password
+            minLength: 12,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1,
+            })
+            .withMessage("Password does not meet requirements."),
+    ]
+}
+
+
+/* ******************************
+ * Check data and return errors or continue to update
+ * ***************************** */
+validate.checkAccountUpdateData = async (req, res, next) => {
+    const { account_firstname, account_lastname, account_email, account_id } = req.body //these will be used to re-populate the form if there is an error, password is not stored and re-populated
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) { //if there are errors
+        let nav = await utilities.getNav()
+        res.render("account/update-account", {
+            errors,
+            title: "Update My Account",
+            nav,
+            account_firstname,
+            account_lastname,
+            account_email,
+            account_id
+        })
+        return
+    }
+    next() //if no errors then continues onto the controller for the update to be carried out
+}
+
+
+/* ******************************
+ * Check data and return errors or continue to update
+ * ***************************** */
+validate.checkPasswordUpdateData = async (req, res, next) => {
+    const { account_firstname, account_lastname, account_email, account_id } = req.body //these will be used to re-populate the form if there is an error, password is not stored and re-populated
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) { //if there are errors
+        let nav = await utilities.getNav()
+        res.render("account/update-account", {
+            errors,
+            title: "Update My Account",
+            nav,
+            account_firstname,
+            account_lastname,
+            account_email,
+            account_id
+        })
+        return
+    }
+    next() //if no errors then continues onto the controller for the update to be carried out
+}
 
 module.exports = validate

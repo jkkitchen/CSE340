@@ -441,3 +441,18 @@ label {
   text-decoration: underline;
   color: black;
 }
+
+/*-----Account Management-----*/
+#welcome-message, #account-management-div h3 {
+  font-family: var(--heading-font);
+  text-align: center;
+}
+
+#account-management-div a {
+  text-decoration: none;
+  color: var(--blue-color);
+  font-family: var(--text-font);
+  display: flex;
+  justify-content: center;
+  font-size: 1.1rem;  
+}

@@ -7,16 +7,24 @@
 
 <!--Message View-->
 <%- messages() %>
-    <!--Display Errors-->
-    <% if (errors) { %>
-        <ul class="notice">
-            <% errors.array().forEach(error=> { %>
-                <li>
-                    <%= error.msg %>
-                </li>
-            <% }) %>
-        </ul>
-    <% } %>
+<!--Display Errors-->
+<% if (errors) { %>
+    <ul class="notice">
+        <% errors.array().forEach(error=> { %>
+            <li>
+                <%= error.msg %>
+            </li>
+        <% }) %>
+    </ul>
+<% } %>
 
 <!--Account Management View-->
-<p>You're logged in.</p>
+<div id="account-management-div">
+    <h2 id="welcome-message">Welcome <%- locals.accountData.account_firstname %></h2>
+    <a title="Update account information link" href="/account/update-account/<%- locals.accountData.account_id %>">Update Account Information</a>
+    <!--Use ejs conditional statements to show inventory management section based on whether or not the user is logged in (1 = logged in, 0 = not logged in)-->
+    <% if (locals.accessLevel === 1) { %>        
+        <h3>Inventory Management</h3>        
+        <p><a title="Link to inventory management" href="/inv/management">Inventory Management</a></p>
+    <% } %>
+</div>

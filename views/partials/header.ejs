@@ -3,15 +3,13 @@
         <a href="/" title="Return to home page">CSE Motors</a>
     </span>
     <div id="tools">
-        <!--Use ejs conditional statements to create links based on whether or not the user is logged in (1 = logged in, 0 = not logged in)-->
-        <%- if (locals.loggedin === 1) { %>
-            <!--An a href link automatically does an action of GET so I don't need to write that out explicitly. Route is still in accountRoute.js-->
-            <a title="Link to account management" href="/account/">Welcome <%- locals.accountData.account_firstname %></a>            
+        <!--Use ejs conditional statements to create links based on whether or not the user is logged in-->
+        <% if (locals.loggedin === 1) { %>
+            <!--An a href link automatically does an action of GET so I don't need to write it out explicitly. Route is in accountRoute.js-->
+            <a title="Welcome to website" href="/account/">Welcome <%- locals.accountData.account_firstname %></a>            
             <a title="Logout" href="/account/logout">Logout</a>
-        <%- } else { %>
+        <% } else { %>
             <a title="Click to log in" href="/account/login">My Account</a>
-        <%- } %>
-    %>
-        
+        <% } %>        
     </div>
 </header>

@@ -39,6 +39,29 @@ async function buildAccountManagement(req, res, next) {
     })
 }
 
+
+/* ****************************************
+*  Deliver update account view
+* *************************************** */
+async function buildUpdateAccount(req, res, next) {
+    let nav = await utilities.getNav()
+    //Collects and stores account_id from URL
+    const account_id = parseInt(req.params.account_id)
+    //Needs to have other info from database to pre-fill forms
+    const accountData = await accountModel.getAccountById(account_id)
+
+    res.render("account/update-account", {
+        title: "Update My Account",
+        nav,
+        account_id: account_id,
+        account_firstname: accountData.account_firstname,
+        account_lastname: accountData.account_lastname,
+        account_email: accountData.account_email,
+        errors: null
+    })
+}
+
+
 /* ****************************************
 *  Process Registration
 * *************************************** */
@@ -57,9 +80,9 @@ async function registerAccount(req, res) {
     } catch (error) {
         req.flash("notice", 'Sorry, there was an error processing the registration.')
         res.status(500).render("account/register", {
-        title: "Registration",
-        nav,
-        errors: null,
+            title: "Registration",
+            nav,
+            errors: null,
         })
     }
 
@@ -89,9 +112,9 @@ async function registerAccount(req, res) {
         req.flash("notice", "Sorry, the registration failed.")
         //Returns to registration view and sends error 501 (not successful) code
         res.status(501).render("account/register", {
-        title: "Registration",
-        nav,
-        errors: null,
+            title: "Registration",
+            nav,
+            errors: null,
         })
     }
 }
@@ -114,10 +137,10 @@ async function accountLogin(req, res) {
         //Set flash message to be displayed if account does not exist
         req.flash("notice", "Please check your credentials and try again.") 
         res.status(400).render("account/login", {
-        title: "Login",
-        nav,
-        errors: null,
-        account_email,
+            title: "Login",
+            nav,
+            errors: null,
+            account_email,
         })
         return
     }
@@ -154,5 +177,133 @@ async function accountLogin(req, res) {
     }
 }
 
+
+/* ****************************************
+*  Process Account Update for First Name, Last Name, and/or Email
+* *************************************** */
+async function updateAccountInfo(req, res) {
+    //Retrieves and stores the navigation bar for use in the view
+    let nav = await utilities.getNav()
+
+    //Collects and stores the values from HTML form that are being sent from the browser in the body of the request object
+    const { account_firstname, account_lastname, account_email, account_id } = req.body
+
+    //Calls the function from the model
+    const regResult = await accountModel.updateAccountInfo(
+        account_firstname,
+        account_lastname,
+        account_email,
+        account_id
+    )
+
+    //Determines if the result was received
+    if (regResult) {
+        //Set flash message to be displayed
+        req.flash(
+        "notice",
+        `Congratulations, you\'ve udpated the account for ${account_firstname} ${account_lastname} at ${account_email}.`
+        )
+        //Takes user back to management view
+        res.status(201).render("account/index", {
+            title: "Account Management",
+            nav,
+            errors: null,
+            account_firstname, 
+            account_lastname,
+            account_email,
+            account_id
+        })
+    } else {
+        //Set flash message to be displayed
+        req.flash("notice", "Sorry, the update failed.")
+        //Returns to update view and sends error 501 (not successful) code
+        res.status(501).render("account/udpate-account", {
+            title: "Update My Account",
+            nav,
+            errors: null,
+            account_firstname, 
+            account_lastname,
+            account_email,
+            account_id
+        })
+    }
+}
+
+/* ****************************************
+*  Process Account Update for Password
+* *************************************** */
+async function updatePassword(req, res) {
+    //Retrieves and stores the navigation bar for use in the view
+    let nav = await utilities.getNav()
+
+    //Collects and stores the values from HTML form that are being sent from the browser in the body of the request object
+    const { account_password, account_id } = req.body
+
+    //Needs to have other info from database to pre-fill forms
+    const accountData = await accountModel.getAccountById(account_id)
+
+    //Hash the password before storing
+    let hashedPassword
+    try {
+        // regular password and cost (salt is generated automatically)
+        hashedPassword = await bcrypt.hashSync(account_password, 10) //10 is the "saltRound", or number of times the passwored will be sent through the hashing algorithm
+    } catch (error) {
+        req.flash("notice", 'Sorry, there was an error processing the update.')
+        res.status(500).render("account/update-account", {
+            title: "Update My Account",
+            nav,
+            account_id,
+            account_firstname: accountData.account_firstname,
+            account_lastname: accountData.account_lastname,
+            account_email: accountData.account_email,
+            errors: null,
+        })
+    }
+
+    //Calls the function from the model
+    const updateResult = await accountModel.updatePassword(hashedPassword)
+
+    //Determines if the result was received
+    if (updateResult) {
+        //Set flash message to be displayed
+        req.flash(
+        "notice",
+        `Congratulations, you\'ve updated your password.`
+        )
+        //Takes user back to account management page
+        res.status(201).render("account/index", {
+            title: "Account Management",
+            nav,
+            account_id,
+            account_firstname: accountData.account_firstname,
+            account_lastname: accountData.account_lastname,
+            account_email: accountData.account_email,
+            errors: null,
+        })
+    } else {
+        //Set flash message to be displayed
+        req.flash("notice", "Sorry, the password change failed.")
+        //Returns to update view and sends error 501 (not successful) code
+        res.status(501).render("account/update-account", {
+            title: "Update My Account",
+            nav,
+            account_id,
+            account_firstname: accountData.account_firstname,
+            account_lastname: accountData.account_lastname,
+            account_email: accountData.account_email,
+            errors: null,
+        })
+    }
+}
+
 //Export functions
-module.exports = { buildLogin, buildRegistration, buildAccountManagement, registerAccount, accountLogin }
+module.exports = {
+    buildLogin,
+    buildRegistration,
+    buildAccountManagement,
+    buildUpdateAccount,
+    registerAccount,
+    accountLogin,
+    updateAccountInfo,
+    updatePassword
+}
