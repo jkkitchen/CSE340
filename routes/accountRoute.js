@@ -53,5 +53,11 @@ accountRouter.post(
     utilities.handleErrors(accountController.updatePassword)
 )
 
+//Process logout request
+accountRouter.get(
+    "/logout",
+    utilities.handleErrors(accountController.accountLogout)
+)
+
 //Export Route Functions
 module.exports = accountRouter;

@@ -179,6 +179,19 @@ async function accountLogin(req, res) {
 
 
 /* ****************************************
+*  Process Logout Request
+* *************************************** */
+async function accountLogout(req, res) {    
+    //Clear cookie with jwt token
+    res.clearCookie("jwt") //clearCookie is a built in function
+    //Send message that user is logged out
+    req.flash("notice", "You have logged out of your account.")
+    //Redirect to home page
+    return res.redirect("/")
+}
+
+
+/* ****************************************
 *  Process Account Update for First Name, Last Name, and/or Email
 * *************************************** */
 async function updateAccountInfo(req, res) {
@@ -304,6 +317,7 @@ module.exports = {
     buildUpdateAccount,
     registerAccount,
     accountLogin,
+    accountLogout,
     updateAccountInfo,
     updatePassword
 }
