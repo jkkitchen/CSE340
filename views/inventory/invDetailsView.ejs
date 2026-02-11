@@ -6,7 +6,37 @@
     <% } else { res.redirect('/') } %>
 
 <!--Message View, not being used right now so using # to comment it out. Replace with - when ready to use.-->
-<%# messages() %>
+<%- messages() %>
 
 <!--Inventory Items Display-->
 <%- page %>
+
+<!--Reviews-->
+<div id="existing-reviews-div">
+    <h2>Customer Reviews</h2>
+    <% if (reviews && reviews.length> 0) { %>
+        <ul id="inventory-reviews-list">
+            <% reviews.forEach(r=> { %>
+                <li>
+                    <strong><%= r.review_alias %></strong> wrote on <%= new Date(r.review_date).toLocaleDateString() %><br>
+                    <%= r.review_text %>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>Be the first to write a review.</p>
+    <% } %>
+</div>
+<div id="new-reviews-div">
+    <% if (locals.loggedin === 1) { %>
+        <form action="/reviews/add" method="post">
+            <!--Create screen name from account data-->
+            <label>Screen Name: <input type="text" readonly value="<%=  locals.accountData.account_firstname.charAt(0) + locals.accountData.account_lastname %>"></label>
+            <label>Review: <textarea name="review_text" rows="5" cols="22" wrap="soft" required><%= locals.review_text || "" %></textarea></label>      
+            <input type="hidden" name="inv_id" value="<%= inv_id %>">            
+            <input type="submit" id="submit-new-review" value="Submit Review">
+        </form>
+    <% } else { %>
+        <p>You must <a href="/account/login" class="link" title="Click to Login">login</a> to write a review.</p>
+    <% } %>
+</div>

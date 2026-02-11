@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model")
+const reviewModel = require("../models/review-model")
 const utilities = require("../utilities")
 
 const invCont = {}
@@ -24,20 +25,25 @@ invCont.buildByClassificationId = async function (req, res, next) {
  * ******* */
 invCont.buildByInventoryId = async function (req, res, next) {
     const inv_id = req.params.inventoryId
+    
+    //Call functions needed for the inventory details page
+    let nav = await utilities.getNav()
     const data = await invModel.getInventoryByInventoryId(inv_id)
     const page = await utilities.buildInventoryItemPage(data)
-    let nav = await utilities.getNav()
-
+    const reviews = await reviewModel.getReviewsByInventoryId(inv_id)
+    
     //Get variables for title
     const invYearName = data.inv_year
     const invMakeName = data.inv_make //Don't need data[0] b/c it's only returning data for one car, not an array
     const invModelName = data.inv_model
-
     
+    //Display page
     res.render("./inventory/invDetailsView", {
         title: `${invYearName} ${invMakeName} ${invModelName}`,
         nav,
         page,
+        reviews,
+        inv_id
     })
 }
 

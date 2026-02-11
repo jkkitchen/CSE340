@@ -28,3 +28,19 @@
         <p><a title="Link to inventory management" href="/inv/management">Inventory Management</a></p>
     <% } %>
 </div>
+<div id="account-reviews-div">
+    <h2 id="account-reviews-heading">My Reviews</h2>    
+    <% if (reviews && reviews.length > 0) { %>
+        <ol id="account-reviews-list">
+            <% reviews.forEach(r => { %>
+                <li>
+                    Reviewed the <%= r.inv_year %> <%= r.inv_make %> <%= r.inv_model %> 
+                    on <%= new Date(r.review_date).toLocaleDateString() %> | 
+                    <a href="/reviews/edit/<%= r.review_id %>" class="account-review-link" title="Click to Edit">Edit</a> |
+                    <a href="/reviews/delete/<%= r.review_id %>" class="account-review-link" title="Click to Delete">Delete</a>
+                </li>
+            <% }) %>
+        </ol>
+    <% } %>    
+</div>
+
