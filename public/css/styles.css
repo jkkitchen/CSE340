@@ -12,6 +12,12 @@
   --blue-color: #18556d;
 }
 
+/*-----General-----*/
+p {
+  font-family: var(--text-font);
+}
+
+
 /*----Checkered Background-----*/
 @media (min-width: 64rem) {
   body {
@@ -286,6 +292,31 @@ h1 {
   color: white;
 }
 
+#new-review-form-div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+#new-review-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;    
+    font-family: var(--text-font);
+    padding: 1rem;
+  }
+
+  #new-review-form label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+#existing-reviews-div,
+#new-review-form-div h2 {
+    font-family: var(--heading-font);
+  }
+
 
 /*-----Error Message Page-----*/
 #error-msg {
@@ -458,4 +489,17 @@ label {
   display: flex;
   justify-content: center;
   font-size: 1.1rem;  
+}
+
+#account-reviews-div h2 {
+  font-family: var(--heading-font);
+  text-align: center;
+}
+
+#account-reviews-list li {
+  font-family: var(--text-font);
+}
+
+#account-reviews-list li a {
+  color: var(--blue-color);
 }

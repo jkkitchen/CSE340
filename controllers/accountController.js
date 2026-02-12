@@ -1,4 +1,5 @@
 const accountModel = require("../models/account-model")
+const reviewModel = require("../models/review-model")
 const utilities = require("../utilities")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
@@ -32,10 +33,17 @@ async function buildRegistration(req, res, next) {
 * *************************************** */
 async function buildAccountManagement(req, res, next) {
     let nav = await utilities.getNav()
+
+    //Get info to build reviews portion of the page
+    console.log("session accountData:", res.locals.accountData)
+    const account_id = res.locals.accountData.account_id
+    const accountReviews = await reviewModel.getReviewsByAccountId(account_id)
+
     res.render("account/index", {
         title: "Account Management",
         nav,
-        errors: null
+        errors: null,
+        reviews: accountReviews || []
     })
 }
 

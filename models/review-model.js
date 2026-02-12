@@ -43,4 +43,31 @@ async function getReviewsByInventoryId(inventory_id) {
     }
 }
 
-module.exports = { getReviewsByAccountId, getReviewsByInventoryId }
+
+/* *******
+ *Add new review to database
+* ******* */
+async function addNewReview(
+    review_text,
+    inv_id,
+    account_id
+) {
+    try {
+        const data = await pool.query(
+            `INSERT INTO public.reviews (review_text, inv_id, account_id)
+            VALUES ($1, $2, $3)
+            RETURNING *`, //only returns the row that was just inserted
+            [review_text, inv_id, account_id]
+        )
+        return data.rows[0] //To check the new row was inserted
+    } catch (error) {
+        console.error("addNewReview error " + error)
+        throw error
+    }
+}
+
+module.exports = {
+    getReviewsByAccountId,
+    getReviewsByInventoryId,
+    addNewReview
+}

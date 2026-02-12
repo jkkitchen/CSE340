@@ -27,13 +27,15 @@
         <p>Be the first to write a review.</p>
     <% } %>
 </div>
-<div id="new-reviews-div">
+<div id="new-review-form-div" id="new-reviews-div">
+    <h2>Add Your Own Review</h2>
     <% if (locals.loggedin === 1) { %>
-        <form action="/reviews/add" method="post">
+        <form id="new-review-form" action="/reviews/add-review" method="post">
             <!--Create screen name from account data-->
             <label>Screen Name: <input type="text" readonly value="<%=  locals.accountData.account_firstname.charAt(0) + locals.accountData.account_lastname %>"></label>
-            <label>Review: <textarea name="review_text" rows="5" cols="22" wrap="soft" required><%= locals.review_text || "" %></textarea></label>      
-            <input type="hidden" name="inv_id" value="<%= inv_id %>">            
+            <label id="review-text-label">Review: <textarea name="review_text" rows="5" cols="50" wrap="soft" required><%= locals.review_text || "" %></textarea></label>      
+            <input type="hidden" name="inv_id" value="<%= inv_id %>">   
+            <!--account_id is not included as a hidden input because it is pulled from the JWT token in the controller function.-->         
             <input type="submit" id="submit-new-review" value="Submit Review">
         </form>
     <% } else { %>
