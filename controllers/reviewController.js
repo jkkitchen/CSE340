@@ -143,6 +143,13 @@ reviewCont.buildDeleteReview = async function (req, res, next) {
         return res.redirect("/account/")
     }
 
+    //Format date
+    const review_date = new Date(review.review_date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    })
+
     //Get inventory data for header
     const invData = await invModel.getInventoryByInventoryId(review.inv_id)
 
@@ -152,7 +159,7 @@ reviewCont.buildDeleteReview = async function (req, res, next) {
         inv_year: invData.inv_year,
         inv_make: invData.inv_make,
         inv_model: invData.inv_model,
-        review_date: review.review_date,
+        review_date: review_date,
         review_text: review.review_text,
         inv_id: review.inv_id,
         review_id: review_id,

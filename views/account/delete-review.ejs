@@ -23,7 +23,7 @@
     <h2> <%= locals.inv_year %> <%= locals.inv_make %> <%= locals.inv_model %></h2>
     <p>Confirm Correct Item! Deletion Cannot Be Undone.</p>
     <form id="delete-review-form" action="/reviews/delete-review" method="post">        
-        <label>Review Date: <input type="text" value="<%= new Date(locals.review_date).toLocaleDateString() %>" readonly></label>
+        <label>Review Date: <input type="text" value="<%= locals.review_date %>" readonly></label>
         <label id="review-text-label">Review: <textarea rows="5" cols="50" wrap="soft" readonly><%= locals.review_text || "" %></textarea></label>
         <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
         <input type="hidden" name="review_id" value="<%= locals.review_id %>">
