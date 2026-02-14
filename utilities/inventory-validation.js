@@ -42,7 +42,7 @@ validate.checkClassificationName = async (req, res, next) => {
 /*  **********************************
   *  Add Inventory Validation Rules
   * ********************************* */
-  validate.addInventoryRules = () => {
+validate.addInventoryRules = () => {
     return [  
         //Classification Names cannot contain a space or special character of any kind
         body("classification_id") //select name is classification_id even classification_name is what shows      

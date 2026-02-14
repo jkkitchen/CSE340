@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model")
+const reviewModel = require("../models/review-model")
 const Util = {}
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
@@ -177,6 +178,40 @@ Util.checkAccountType = (req, res, next) => {
     } else {
         req.flash("notice", "Please log in.")
         return res.redirect("/account/login")
+    }
+}
+
+
+/* ****************************************
+ *  Check Account ID for Modifying Reviews
+ * ************************************ */
+Util.checkAccountId = async (req, res, next) => {    
+    //Collect and store review_id from URL for loading modify review page, store review_id from POST request for submitting form for modification and deletion
+    const review_id = Number(req.params.review_id) || Number(req.body.review_id)
+    //Check if the review id exists
+    if (!review_id) {
+        req.flash("notice", "Review ID does not exist.")
+        return res.redirect("/account/")
+    }
+        
+    //Get review from database using review_id
+    const review = await reviewModel.getReviewById(review_id)
+    //Check if the review exists
+    if (!review) {
+        req.flash("notice", "Review does not exist.")
+        return res.redirect("/account/")
+    }
+
+    //Get account_id from database
+    const account_id = review.account_id
+    //Get account_id from JWT Token
+    const tokenAccountId = Number(res.locals.accountData.account_id)
+    //Check if they match
+    if (account_id !== tokenAccountId) { //do not match    
+        req.flash("notice", "You may not modify a review not not associated with your account.")
+        return res.redirect("/account/")        
+    } else { //match
+        next()
     }
 }
 

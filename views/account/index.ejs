@@ -36,7 +36,7 @@
                 <li>
                     Reviewed the <%= r.inv_year %> <%= r.inv_make %> <%= r.inv_model %> 
                     on <%= r.review_date %> | 
-                    <a href="/reviews/edit/<%= r.review_id %>" class="account-review-link" title="Click to Edit">Edit</a> |
+                    <a href="/reviews/modify/<%= r.review_id %>" class="account-review-link" title="Click to Modify">Modify</a> |
                     <a href="/reviews/delete/<%= r.review_id %>" class="account-review-link" title="Click to Delete">Delete</a>
                 </li>
             <% }) %>

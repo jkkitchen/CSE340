@@ -292,30 +292,49 @@ h1 {
   color: white;
 }
 
-#new-review-form-div {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-#new-review-form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;    
-    font-family: var(--text-font);
-    padding: 1rem;
-  }
-
-  #new-review-form label {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
 #existing-reviews-div,
 #new-review-form-div h2 {
     font-family: var(--heading-font);
-  }
+}
+
+#new-review-form-div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+
+/*-----Vehicle Details Page/Modify Review Page/Delete Review Page -----*/
+#new-review-form,
+#modify-review-form,
+#delete-review-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: var(--text-font);
+  padding: 1rem;
+}
+
+#new-review-form label,
+#modify-review-form label,
+#delete-review-form label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.review-text {
+  font-family: var(--text-font);
+}
+
+
+/*-----Modify Review Page/Delete Review Page-----*/
+#modify-review-form-div,
+#delete-review-form-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 
 /*-----Error Message Page-----*/

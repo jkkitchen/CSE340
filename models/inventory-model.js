@@ -127,6 +127,7 @@ async function modifyInventory(
         return data.rows[0]
     } catch (error) {
         console.error("model error: " + error)
+        throw error
     }
 }
 

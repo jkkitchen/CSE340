@@ -19,7 +19,7 @@
             <% reviews.forEach(r=> { %>
                 <li>
                     <strong><%= r.review_alias %></strong> wrote on <%= new Date(r.review_date).toLocaleDateString() %><br>
-                    <%= r.review_text %>
+                    <p class="review-text"><%= r.review_text %></p>
                 </li>
             <% }) %>
         </ul>

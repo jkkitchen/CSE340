@@ -1,0 +1,33 @@
+<!-- Content Heading -->
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+<% } else { res.redirect('/') } %>
+
+<!--Message View-->
+<%- messages() %>
+<!--Display Errors-->
+<% if (errors) { %>
+    <ul class="notice">
+        <% errors.array().forEach(error=> { %>
+            <li>
+                <%= error.msg %>
+            </li>
+            <% }) %>
+    </ul>
+<% } %>
+
+<!--Delete Review Form-->
+<div id="delete-review-form-div">
+    <h2> <%= locals.inv_year %> <%= locals.inv_make %> <%= locals.inv_model %></h2>
+    <p>Confirm Correct Item! Deletion Cannot Be Undone.</p>
+    <form id="delete-review-form" action="/reviews/delete-review" method="post">        
+        <label>Review Date: <input type="text" value="<%= new Date(locals.review_date).toLocaleDateString() %>" readonly></label>
+        <label id="review-text-label">Review: <textarea rows="5" cols="50" wrap="soft" readonly><%= locals.review_text || "" %></textarea></label>
+        <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
+        <input type="hidden" name="review_id" value="<%= locals.review_id %>">
+        <!--account_id is not included as a hidden input because it is pulled from the JWT token in the controller function.-->
+        <input type="submit" id="submit-delete-review" value="Delete Review">
+    </form>
+</div>

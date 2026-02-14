@@ -1,0 +1,33 @@
+<!-- Content Heading -->
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+<% } else { res.redirect('/') } %>
+
+<!--Message View-->
+<%- messages() %>
+<!--Display Errors-->
+<% if (errors) { %>
+    <ul class="notice">
+        <% errors.array().forEach(error=> { %>
+            <li>
+                <%= error.msg %>
+            </li>
+            <% }) %>
+    </ul>
+<% } %>
+
+<!--Modify Review Form-->
+<div id="modify-review-form-div">
+    <h2><%= locals.inv_year %> <%= locals.inv_make %> <%= locals.inv_model %></h2>
+    <form id="modify-review-form" action="/reviews/modify-review" method="post">
+        <!--Create screen name from account data-->
+        <label>Screen Name: <input type="text" readonly value="<%= locals.accountData.account_firstname.charAt(0) + locals.accountData.account_lastname %>"></label>
+        <label id="review-text-label">Review: <textarea name="review_text" rows="5" cols="50" wrap="soft" required><%= locals.review_text || "" %></textarea></label>
+        <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
+        <input type="hidden" name="review_id" value="<%= locals.review_id %>">
+        <!--account_id is not included as a hidden input because it is pulled from the JWT token in the controller function.-->
+        <input type="submit" id="submit-modified-review" value="Submit Modified Review">
+    </form>
+</div>
