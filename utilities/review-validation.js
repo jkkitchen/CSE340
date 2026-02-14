@@ -12,8 +12,7 @@ const invModel = require("../models/inventory-model")
     return [
         // review text is required and must be string
         body("review_text")
-            .trim() //trims whitespace
-            .escape() //replaces <,>.&.',",`,/,\ with HTML entities
+            .trim() //trims whitespace            
             .notEmpty() //checks there is a value entered            
             .withMessage("Please provide a review."), // on error this message is sent.
     ]
